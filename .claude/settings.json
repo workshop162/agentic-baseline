@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "FILE=\"$CLAUDE_TOOL_INPUT_FILE_PATH\"; if [[ \"$FILE\" =~ \\.(ts|tsx)$ ]] && [[ ! \"$FILE\" =~ \\.test\\. ]] && [[ ! \"$FILE\" =~ \\.d\\.ts$ ]] && [[ ! \"$FILE\" =~ /dist/ ]]; then LINES=$(wc -l < \"$FILE\" 2>/dev/null || echo 0); if [ \"$LINES\" -gt 300 ]; then echo \"HARD CEILING VIOLATED: $FILE has $LINES lines (300 max). Split this file now.\"; exit 1; elif [ \"$LINES\" -gt 200 ]; then echo \"WARNING: $FILE has $LINES lines (soft limit 200). Consider splitting.\"; fi; fi"
+          }
+        ]
+      }
+    ]
+  }
+}
