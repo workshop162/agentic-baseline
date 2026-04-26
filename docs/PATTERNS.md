@@ -8,11 +8,11 @@ This document catalogs which patterns belong in the baseline (universal) and whi
 
 These ship in the baseline unchanged. Every project gets them. They are project-agnostic.
 
-### File Size Limits (`.claude/rules/coding-standards.md`)
+### File Size Limits (`docs/rules/coding-standards.md`)
 
 200 soft / 300 hard for source files. 500 for tests. These numbers are the same across every TypeScript project. The reasoning doesn't change based on the framework.
 
-### TDD Workflow (`.claude/rules/testing.md`)
+### TDD Workflow (`docs/rules/testing.md`)
 
 Red-green-refactor. Co-located tests. No `it.skip`. Test behavior not implementation. These rules are framework-agnostic — they apply whether you're using Vitest, Jest, or node:test.
 
@@ -30,7 +30,7 @@ Reproduce → Investigate → Root Cause → Fix → Verify → Commit. This seq
 
 ### Implement Feature Skill (`.claude/skills/implement-feature/SKILL.md`)
 
-Understand → Plan → Types → Red → Green → Verify → Checklist → Commit. The TDD loop is universal. The checklist items ("no hardcoded colors," "router delegates to service") are project-specific and handled in CLAUDE.md.
+Understand → Plan → Types → Red → Green → Verify → Checklist → Commit. The TDD loop is universal. The checklist items ("no hardcoded colors," "router delegates to service") are project-specific and handled in `AGENTS.md`.
 
 ### Review Skill (`.claude/skills/review/SKILL.md`)
 
@@ -46,15 +46,17 @@ The hard-fail at 300 / warn at 200 hook is universal. Every project gets it rega
 
 These are not in the baseline — they are generated for each project.
 
-### CLAUDE.md
+### AGENTS.md
 
-Every project's CLAUDE.md is different. It describes:
+Every project's `AGENTS.md` is different. It describes:
 - The specific project architecture and domain
 - The specific packages and their boundaries
 - The specific commands (`pnpm dev`, `pnpm test`, etc.)
 - The specific conventions for that codebase
 
 Bootstrap generates this from reading the project. It is never templated.
+
+`AGENTS.md` is the canonical project-instruction file across all coding agents (Claude Code, Codex, Cursor, Copilot, Gemini CLI, Windsurf, Aider, Zed, Warp, RooCode) per the [agents.md](https://agents.md) open standard. Bootstrap only generates a separate `CLAUDE.md` when the project has Claude-specific overlays that genuinely don't belong in the universal file — most projects skip it entirely and let Claude Code fall back to `AGENTS.md`.
 
 ### Formatter/Linter PostToolUse hooks (`.claude/settings.json`)
 
@@ -64,7 +66,7 @@ The file size hook is universal. Everything else (oxfmt hook, Biome hook, oxlint
 
 The enforcer's structure is universal but its content is entirely project-specific — the allowed dependency graph is different for every monorepo. Bootstrap populates it. Single-package projects delete it.
 
-### Architecture Rules (`.claude/rules/[topic].md`)
+### Architecture Rules (`docs/rules/[topic].md`)
 
 Project-specific rules like:
 - `database.md` — patterns for the specific ORM/DB combination
@@ -73,6 +75,10 @@ Project-specific rules like:
 - `[framework]-patterns.md` — conventions for Next.js, tRPC, Drizzle, Three.js, etc.
 
 Bootstrap generates these if they're needed. The baseline doesn't include them because they'd be wrong for most projects.
+
+### Per-package `AGENTS.md` (monorepo only)
+
+The agents.md standard supports nested instruction files: the closest `AGENTS.md` in the directory tree wins. Bootstrap generates per-package overlays when a package has non-trivial invariants that don't belong in the root file. Examples: `apps/server/AGENTS.md` capturing "physics state never via Colyseus schema sync"; `packages/db/AGENTS.md` capturing ORM-specific patterns. Keep them short — root rules still apply.
 
 ---
 

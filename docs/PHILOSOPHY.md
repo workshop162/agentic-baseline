@@ -62,7 +62,7 @@ This document explains the reasoning behind every universal convention in the ba
 
 **What TDD forces**: Writing a failing test first forces you to define expected behavior independent of implementation. If the test passes before you write implementation code, you've written the wrong test.
 
-**Why this has to be a skill**: A rule in `.claude/rules/testing.md` says "write failing tests first." A skill in `.claude/skills/implement-feature/SKILL.md` walks through the entire TDD cycle with explicit verification steps. The skill makes it harder to skip the failing-test step accidentally.
+**Why this has to be a skill**: A rule in `docs/rules/testing.md` says "write failing tests first." A skill in `.claude/skills/implement-feature/SKILL.md` walks through the entire TDD cycle with explicit verification steps. The skill makes it harder to skip the failing-test step accidentally.
 
 ---
 

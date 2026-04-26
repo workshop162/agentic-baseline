@@ -62,7 +62,7 @@ Check that new files follow the existing convention in their directory.
 
 ## 6. Import Boundary Check
 
-Verify all imports respect the dependency graph defined in CLAUDE.md.
+Verify all imports respect the dependency graph defined in AGENTS.md.
 
 Look for:
 - Imports that go "up" in the dependency tree (lower-level packages importing from higher-level)

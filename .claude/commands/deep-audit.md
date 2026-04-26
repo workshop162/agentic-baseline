@@ -10,12 +10,12 @@ If no area is specified, audit the entire project starting with the most critica
 
 ## Audit Process
 
-1. **Read CLAUDE.md first** to understand architecture, conventions, and package boundaries
+1. **Read AGENTS.md first** to understand architecture, conventions, and package boundaries
 2. **Systematically review** the target area, focusing on:
    - Security vulnerabilities (auth bypasses, injection, exposed secrets, missing authorization)
    - Performance issues (N+1 queries, missing indexes, unnecessary re-renders, bundle size)
    - Error handling gaps (unhandled promises, missing try/catch, silent failures)
-   - Architecture violations (wrong package boundaries per CLAUDE.md rules)
+   - Architecture violations (wrong package boundaries per AGENTS.md rules)
    - Dead code and unused imports
    - Type safety gaps (`any` types, missing null checks, unsafe casts)
    - Missing or broken validation (schemas not matching actual usage)

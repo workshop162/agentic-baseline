@@ -8,7 +8,7 @@ description: TDD workflow for implementing a new feature — understand, plan, t
 ## 1. Understand
 
 - Read the feature spec or user description
-- Read CLAUDE.md and `.claude/rules/` for relevant constraints
+- Read AGENTS.md and `docs/rules/` for relevant constraints
 - If the project has domain documentation, read the relevant parts
 - Ask clarifying questions before starting if the scope is ambiguous
 

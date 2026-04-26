@@ -112,13 +112,19 @@ Wait for the user to confirm or redirect before proceeding.
 
 After user confirmation:
 
-**CLAUDE.md** — Generate from project analysis. Include:
+**`AGENTS.md`** — Generate from project analysis as the **canonical, cross-tool agent-instruction file** (loaded automatically by Claude Code, OpenAI Codex, Cursor, GitHub Copilot, Gemini CLI, Windsurf, Aider, Zed, Warp, RooCode per the [agents.md](https://agents.md) standard). Include:
+- Header note explaining this is the canonical file and what tools load it
 - Project name and one-sentence description
 - Architecture overview (packages, apps, key dependencies)
 - Critical rules (YAGNI, guardrails, package boundaries if monorepo)
 - Common commands (dev, test, typecheck, format, lint)
 - Conventions (naming, commits, file size)
-- Links to relevant docs
+- Links to `docs/rules/coding-standards.md` and `docs/rules/testing.md`
+- An "Agent runtime notes" section with tool-specific affordances (Claude Code subagents/skills, Codex behavior, Lefthook gate as the universal safety net) and any environmental quirks (PATH gotchas, shell aliases, etc.)
+
+**`CLAUDE.md`** — Only generate one if the project has genuine Claude-specific overlays not appropriate for `AGENTS.md` (rare — for example, a deep auto-memory integration or Claude Code skill-loading directives). When generated, keep it thin: start with `@AGENTS.md` to inline the universal file, then add only the Claude-specific deltas. **Default behavior: do not generate `CLAUDE.md`** — Claude Code falls back to `AGENTS.md` automatically.
+
+**Per-package `AGENTS.md`** (monorepo only) — The agents.md standard supports nested files: the closest `AGENTS.md` in the directory tree wins. For each package with non-trivial invariants that don't belong in the root file (e.g., Colyseus discipline for a multiplayer server, ORM patterns for a database package), generate a per-package `AGENTS.md` overlay. Keep them short — root rules still apply.
 
 **`.claude/settings.json`** — Update with chosen hooks:
 - Keep the universal file size hook (already present)
@@ -127,16 +133,16 @@ After user confirmation:
 - Add pre-commit typecheck PreToolUse hook (runs before `git commit`)
 - Add project-specific boundary/pattern hooks if applicable
 
-**`.claude/rules/`** — Copy universal files (already present):
+**`docs/rules/`** — Copy universal files (already present in baseline):
 - `coding-standards.md` — already there
 - `testing.md` — already there
-- Generate project-specific rules if needed (e.g., package boundaries, architecture constraints)
+- Generate project-specific rules under `docs/rules/[topic].md` if needed (e.g., package boundaries, architecture constraints, error-handling conventions)
 
-**`.claude/commands/`** — Already present (deep-audit, audit-fix, refactor, refactor-fix)
+**`.claude/commands/`** — Already present (deep-audit, audit-fix, refactor, refactor-fix). These are Claude Code-flavored markdown specs but readable by any agent.
 
-**`.claude/skills/`** — Already present (fix-issue, implement-feature, review)
+**`.claude/skills/`** — Already present (fix-issue, implement-feature, review). Same — Claude Code loads them as skills; other agents read them as plain markdown.
 
-**`.claude/agents/package-boundary-enforcer.md`** — If monorepo: populate with real package graph. If single package: remove the stub.
+**`.claude/agents/package-boundary-enforcer.md`** — If monorepo: populate with real package graph. If single package: remove the stub. The document itself is readable by any agent as a boundary spec; Claude Code additionally registers it as an auto-invocable subagent.
 
 ### Step 7: Record the decision
 
@@ -231,5 +237,5 @@ Do NOT ask about things with clear answers. Do NOT present a menu.
 - **Never change tooling the project is already using without a compelling reason.** Don't churn.
 - **Never install packages without asking.** Show the `npm install` / `pnpm add` commands and wait for confirmation.
 - **Never break existing CI.** If the project has GitHub Actions, read the workflow files before configuring hooks.
-- **Always generate CLAUDE.md from the actual project** — don't use a template.
+- **Always generate `AGENTS.md` from the actual project** — don't use a template. Only generate a separate `CLAUDE.md` if the project has Claude-specific overlays that don't belong in the universal file.
 - **Always push the decision record** before cleaning up locally.
