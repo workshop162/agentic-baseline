@@ -4,6 +4,29 @@ This tracks how the patterns in this baseline were discovered and refined across
 
 ---
 
+## v7 — AGENTS.md Adoption (2026-04-26)
+
+**What changed**: The baseline (and every project bootstrapped from it) now uses [`AGENTS.md`](https://agents.md) as the canonical agent-instruction file instead of `CLAUDE.md`. The agents.md format is an open standard stewarded by the Linux Foundation's Agentic AI Foundation, supported natively by Claude Code, OpenAI Codex, Cursor, GitHub Copilot, Gemini CLI, Windsurf, Aider, Zed, Warp, RooCode, and others.
+
+**Why**: A growing fraction of agentic-first work happens across multiple coding agents — Claude Code for some workstreams, Codex for others, Cursor for IDE-native work. Maintaining `CLAUDE.md` forced multi-agent teams to either duplicate instructions across `CLAUDE.md` + `.cursorrules` + `copilot-instructions.md` (drift inevitable) or write tool-specific overlays. The agents.md standard solves this with one canonical file every modern agent loads automatically. Claude Code falls back to `AGENTS.md` when no `CLAUDE.md` is present, so adopting the standard adds zero friction for Claude-only workflows while making the project portable across the rest of the ecosystem.
+
+**Key changes**:
+- `CLAUDE.md` → `AGENTS.md` (universal canonical file)
+- `.claude/rules/` → `docs/rules/` (universal coding/testing rules are not Claude-specific; the directory name was a misnomer)
+- The `.claude/` directory now contains only Claude Code-specific harness pieces: `settings.json`, `commands/`, `skills/`, `agents/`. Other agents read these as plain markdown when relevant.
+- `bootstrap.md` updated to generate `AGENTS.md` (canonical) + optionally a thin `CLAUDE.md` only when the project has Claude-specific overlays
+- New pattern documented: per-package `AGENTS.md` files for monorepo overlays (the agents.md standard supports nested files; closest one wins)
+
+**Migration path for downstream projects already bootstrapped from v6 or earlier**:
+1. `git mv CLAUDE.md AGENTS.md`
+2. `git mv .claude/rules docs/rules`
+3. Update internal references from `CLAUDE.md` → `AGENTS.md` and `.claude/rules/` → `docs/rules/`
+4. Optional: add a thin `CLAUDE.md` if you have Claude-specific overlays (start with `@AGENTS.md` to inline the universal file)
+
+**What did not change**: All universal patterns (file size limits, TDD, audit-then-fix, file-size hook, package boundary enforcement) carry over unchanged. The mechanical safety net (Lefthook + biome + typecheck + file-size hook) is still the real backstop.
+
+---
+
 ## v6 — Learning Baseline (2026-04-11)
 
 **What changed**: Extracted the `decisions/` knowledge base from the history embedded in this file. Every bootstrap now pushes a structured decision record back to the baseline. Future bootstraps read these records before making recommendations.

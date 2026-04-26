@@ -10,7 +10,7 @@ You can target broad areas or drill into specific directories.
 
 ## Review Focus Areas
 
-1. **Read CLAUDE.md first** to understand architecture and conventions
+1. **Read AGENTS.md first** to understand architecture and conventions
 
 2. **Systematically review** the target area for:
 
@@ -47,7 +47,7 @@ You can target broad areas or drill into specific directories.
 
 ### Code Organization
 
-- Files in the wrong directory per CLAUDE.md rules
+- Files in the wrong directory per AGENTS.md rules
 - Circular dependencies
 - Files over 300 lines that should be split
 - Unclear naming (functions, variables, files)
